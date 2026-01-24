@@ -93,12 +93,12 @@ Designed with a **modern UI**, **robust backend**, and **real-world workflows** 
 git clone https://github.com/abbyyyydabby/task-manager-mern.git
 cd task-manager-mern
 
-2️⃣ Backend Setup
+2️⃣ Backend Setup :
 cd backend
 npm install
 npm run dev
 
-3️⃣ Frontend Setup
+3️⃣ Frontend Setup :
 cd frontend/Task-Manager
 npm install
 npm run dev
