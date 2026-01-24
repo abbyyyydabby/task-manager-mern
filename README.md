@@ -89,7 +89,7 @@ Designed with a **modern UI**, **robust backend**, and **real-world workflows** 
 
 
 🛠️ Setup Instructions
-1️⃣ Clone the Repository
+1️⃣ Clone the Repository :
 git clone https://github.com/abbyyyydabby/task-manager-mern.git
 cd task-manager-mern
 
