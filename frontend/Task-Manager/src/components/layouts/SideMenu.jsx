@@ -32,11 +32,9 @@ const SideMenu = ({ activeMenu }) => {
 
   // 🔥 CRITICAL FIX: absolute image URL safety
   const profileImage =
-    user?.profileImageUrl?.startsWith("http")
-      ? user.profileImageUrl
-      : user?.profileImageUrl
-      ? `http://localhost:8000${user.profileImageUrl}`
-      : "/profileimage.png";
+   : user?.profileImageUrl
+? `${import.meta.env.VITE_API_URL || "http://localhost:8000"}${user.profileImageUrl}`
+: "/profileimage.png";
 
   return (
     <aside className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
