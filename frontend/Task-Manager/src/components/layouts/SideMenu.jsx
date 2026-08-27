@@ -6,6 +6,7 @@ import { SIDE_MENU_DATA, SIDE_MENU_USER_DATA } from "../../utils/data";
 const SideMenu = ({ activeMenu }) => {
   const { user, clearUser } = useContext(UserContext);
   const [menuItems, setMenuItems] = useState([]);
+  const [imgError, setImgError] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,6 +16,12 @@ const SideMenu = ({ activeMenu }) => {
       );
     }
   }, [user]);
+
+  // Reset the error flag whenever the underlying image URL changes
+  // (e.g. after a profile photo upload), so a new image gets a fresh chance to load.
+  useEffect(() => {
+    setImgError(false);
+  }, [user?.profileImageUrl]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -30,8 +37,16 @@ const SideMenu = ({ activeMenu }) => {
     }
   };
 
-  // 🔥 CRITICAL FIX: absolute image URL safety
-  const profileImage = user?.profileImageUrl
+  // Absolute image URL safety:
+  // - if it already failed once, stop retrying and show the local fallback
+  // - if it's already an absolute URL (http/https), use it as-is
+  // - if it's a relative path from the backend, prefix with the deployed API URL
+  // - if there's no image at all, use the local fallback
+  const profileImage = imgError
+    ? "/profileimage.png"
+    : user?.profileImageUrl?.startsWith("http")
+    ? user.profileImageUrl
+    : user?.profileImageUrl
     ? `${import.meta.env.VITE_API_URL || "http://localhost:8000"}${user.profileImageUrl}`
     : "/profileimage.png";
 
@@ -43,9 +58,7 @@ const SideMenu = ({ activeMenu }) => {
           src={profileImage}
           alt="Profile"
           className="w-20 h-20 rounded-full object-cover border"
-          onError={(e) => {
-            e.currentTarget.src = "/default-avatar.png";
-          }}
+          onError={() => setImgError(true)}
         />
 
         {user?.role === "admin" && (
